@@ -27,7 +27,7 @@
       <div class="statistics-dashboard-right">
         <el-date-picker
           v-model="value1"
-          type="date"
+          type="month"
           placeholder="选择日期"
           :default-value="getCurrentDate()"
           class="date-picker"

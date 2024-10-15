@@ -53,3 +53,12 @@ export default {
   font-size: 12px !important;
  }
 </style>
+<style>
+ tbody tr td{
+  padding: 2px 0 !important;
+ }
+ .pagination {
+  margin-top: 5px !important ;
+ }
+</style>
+

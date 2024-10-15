@@ -5,7 +5,7 @@
     <div class="nav-list-container-left">
       <img src="@/assets/YesPayLogo.png" class="sidebar-logo_new">
       <div v-for="(item,index) in navList" :key="index" class="nav-item" :class="{'nav-item-active':$route.path===item.path}" @click="handleJump(item.path)">
-        <i>icon</i><span>{{ item.text }}</span>
+        <i :class="item.iconName" class="navbar-icon" /><span>{{ item.text }}</span>
       </div>
     </div>
     <div class="right-menu">
@@ -156,12 +156,14 @@ export default {
       navList: [
         {
           text: '首页',
+          iconName: 'el-icon-s-marketing',
           path: '/homePage'
 
         },
         {
           text: '查单',
-          path: '/transactionManage/collectionOrder'
+          iconName: 'el-icon-s-order',
+          path: '/merchantManage/orderSearch'
 
         }
       ]
@@ -262,6 +264,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  .navbar-icon {
+    font-size: 20px;
+  }
   .hamburger-container {
     line-height: 46px;
     height: 100%;
@@ -349,12 +354,15 @@ export default {
   align-items: center;
 }
 .nav-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   width: 100px;
-  height: 28px;
+  height: 36px;
   // background-color: #2e3046;
   border: 1px solid #fff;
   border-radius: 4px;
-  padding: 4px 8px;
+  padding: 6px 18px;
   text-align: center;
   margin-right: 20px;
   color: #fff;

@@ -14,7 +14,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/merchantManage',
+    redirect: '/homePage',
     roles: ['user', 'admin'],
     hidden: true,
     area: 'ALL'
@@ -69,9 +69,9 @@ export const defaultRoutes = [
     id: '4',
     children: [
       {
-        path: '/merchantManage',
-        name: 'cardMerchantList',
-        component: () => import('@/views/cardMerchant/index.vue'),
+        path: '/merchantManage/orderSearch',
+        name: 'orderSearch',
+        component: () => import('@/views/merchantManage/orderSearch.vue'),
         id: '4001',
         parentsId: '4',
         meta: {
