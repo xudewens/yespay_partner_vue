@@ -65,7 +65,7 @@ export const defaultRoutes = [
   {
     path: '/',
     component: Layout,
-    title: '卡商管理',
+    title: '查单',
     id: '4',
     children: [
       {
@@ -75,19 +75,19 @@ export const defaultRoutes = [
         id: '4001',
         parentsId: '4',
         meta: {
-          title: '卡商管理',
+          title: '查单',
           icon: 'dashboard',
           keepAlive: true
         },
-        beforeEnter: (to, from, next) => {
-          const roleList = JSON.parse(localStorage.getItem(process.env.VUE_APP_PARAM + '_MENU'))
-          const roleIdList = flattenTree(roleList)
-          if (roleIdList.includes('10010001')) {
-            next()
-          } else {
-            next('/blankPage')
-          }
-        }
+        // beforeEnter: (to, from, next) => {
+        //   const roleList = JSON.parse(localStorage.getItem(process.env.VUE_APP_PARAM + '_MENU'))
+        //   const roleIdList = flattenTree(roleList)
+        //   if (roleIdList.includes('10010001')) {
+        //     next()
+        //   } else {
+        //     next('/blankPage')
+        //   }
+        // }
       },
       {
         path: '/cardMerchant/addcardMerchant',

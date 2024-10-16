@@ -121,17 +121,20 @@ export default {
 }
 .statistics-dashboard {
     display: flex;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
     flex-wrap: wrap;
     // justify-content: space-between;
 }
 .statistics-dashboard-left,.statistics-dashboard-right{
-    width: 440px;
-    height: 140px;
-    margin-right: 50px;
+    width: 500px;
+    height: 200px;
+    margin-right: 100px;
+}
+.statistics-dashboard-right {
+  margin-right: 0;
 }
 .date-picker{
-    margin-bottom: 10px;
+    margin-bottom: 25px;
 }
 .statistics-data-left{
     height: 50px;
@@ -150,8 +153,8 @@ export default {
 .statistics-data-num{
     font-size: 22px;
     font-weight: 700;
-padding-bottom: 20px;
-}
+  padding-bottom: 20px;
+  }
 .statistics-data-desc{
     padding: 12px 0px;
     background-color: #f2f2f2;
@@ -183,7 +186,7 @@ padding-bottom: 20px;
 font-size: 14px;
 }
 .card-contsiner{
-    width: 400px;
+    width: 500px;
 }
 .card-code{
     margin-bottom: 3px;
