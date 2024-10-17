@@ -8,7 +8,11 @@
         <i :class="item.iconName" class="navbar-icon" /><span>{{ item.text }}</span>
       </div>
     </div>
-    <div class="right-menu">
+
+    <div v-if="this.device === 'mobile'" class="right-menu" @click="drawer = true">
+      <i class="el-icon-s-fold icon-menu" />
+    </div>
+    <div v-else class="right-menu">
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img src="./img/4.png" class="user-avatar">
@@ -25,7 +29,6 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-
     <!-- 修改密码 -->
     <el-dialog
       title="修改登录密码"
@@ -89,6 +92,7 @@
         <el-button type="primary" @click="user_true()">确 认</el-button>
       </div>
     </el-dialog>
+    <DrawerNav :drawer="drawer" :username="username" />
   </div>
 </template>
 
@@ -98,13 +102,16 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import MD5 from 'crypto-js/md5'
+import DrawerNav from './drawerNav.vue'
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    DrawerNav
   },
   data() {
     return {
+      drawer: false,
       username: '', // 用户名
       dialogFormVisible: false, // 修改密码的弹窗
       passwordForm: {
@@ -170,12 +177,18 @@ export default {
     }
   },
   computed: {
+    device() {
+      return this.$store.state.app.device
+    }
+  },
+  computed: {
     ...mapGetters(['sidebar', 'avatar', 'device'])
   },
   mounted() {
     this.username = localStorage.getItem(process.env.VUE_APP_PARAM + '_USERNAME')
   },
   methods: {
+
     handleJump(path) {
       this.$router.push(path)
     },
@@ -319,6 +332,7 @@ export default {
           background: rgba(0, 0, 0, .025)
         }
       }
+
     }
 
     .avatar-container {
@@ -345,9 +359,15 @@ export default {
         //   top: 25px;
         //   font-size: 12px;
         // }
+
       }
     }
   }
+  .icon-menu{
+          cursor: pointer;
+          font-size: 36px;
+          color: #fff;
+        }
 }
 .nav-list-container-left{
   display: flex;
