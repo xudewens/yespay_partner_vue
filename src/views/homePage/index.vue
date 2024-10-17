@@ -14,11 +14,11 @@
           <div class="statistics-data ">
             <div class="statistics-left">
               <div class="statistics-data-num">Rp 120,021,221</div>
-              <div class="statistics-data-desc">代收金额</div>
+              <div class="statistics-data-desc"><span>代收金额</span></div>
             </div>
             <div class="statistics-right">
               <div class="statistics-data-num">189</div>
-              <div class="statistics-data-desc">代收订单</div>
+              <div class="statistics-data-desc"><span>代收订单</span></div>
             </div>
           </div>
 
@@ -36,11 +36,11 @@
           <div class="statistics-data ">
             <div class="statistics-left">
               <div class="statistics-data-num">Rp 120,021,221</div>
-              <div class="statistics-data-desc">代收金额</div>
+              <div class="statistics-data-desc"><span>代收金额</span></div>
             </div>
             <div class="statistics-right">
               <div class="statistics-data-num">189</div>
-              <div class="statistics-data-desc">代收订单</div>
+              <div class="statistics-data-desc"><span>代收订单</span></div>
             </div>
           </div>
 
@@ -56,7 +56,7 @@
       <el-card class="box-card card-contsiner">
         <div v-for="(item,index) in cardList" :key="index" class="box-card-item">
           <div class="box-card-item-left">
-            <i class="card-icon">{{ item.type }}</i>
+            <img class="card-icon" src="@/assets/404_images/404_cloud.png"></img>
             <div class="card-desc">
 
               <div class="card-code">
@@ -123,11 +123,11 @@ export default {
     display: flex;
     margin-bottom: 30px;
     flex-wrap: wrap;
-    // justify-content: space-between;
+    justify-content: space-between;
 }
 .statistics-dashboard-left,.statistics-dashboard-right{
-    width: 500px;
-    height: 200px;
+    width: 45%;
+    height: 300px;
     margin-right: 100px;
 }
 .statistics-dashboard-right {
@@ -183,7 +183,7 @@ export default {
     display: flex;
 }
 .card-desc{
-font-size: 14px;
+  font-size: 22px;
 }
 .card-contsiner{
     width: 500px;
@@ -201,4 +201,78 @@ line-height: 40px;
 
 }
 
+</style>
+<style lang="scss">
+@media (max-width: 800px) {
+  .home-page-index{
+    padding: 0;
+    background-color: #f5f5f5;
+  }
+  .statistics-dashboard-left, .statistics-dashboard-right{
+    width: 100%;
+    height: 380px;
+     margin-right: 0px;
+     padding: 20px 22px;
+     background-color: #fff;
+     margin-bottom: 28px;
+  }
+  .statistics-data {
+    height: 225px;
+  }
+  .el-card{
+    border: 1px dashed #767777 !important;
+  }
+  .statistics-left, .statistics-right{
+    height:70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+  }
+  .statistics-left{
+    border-right: 1px dashed #767777;
+
+  }
+  .statistics-data-desc{
+    width: 80%;
+    margin: auto;
+    border-radius: 10px;
+    background-color: #7915f5;
+    color: #fff;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    span{
+      width: 100%;
+    }
+    font-size: 22px;
+    font-weight: 500;
+  }
+  .statistics-data-num{
+    color: #ff0000;
+    font-size: 32px;
+  }
+  .card-list{
+    background-color: #fff;
+    padding: 20px 22px;
+    font-size: 16px;
+  }
+  .statistics-dashboard{
+    margin-bottom: 0px;
+  }
+  .card-contsiner{
+    width: 100%;
+}
+.card-icon{
+width: 80px;
+height: 80px;
+background-color: #7915f5;
+margin-right: 15px;
+}
+.card-desc{
+  font-size:16px ;
+  margin: auto;
+}
+
+}
 </style>

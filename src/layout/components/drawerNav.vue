@@ -1,7 +1,6 @@
 <template>
   <el-drawer
     :visible.sync="drawer"
-    :direction="direction"
     :show-close:="false"
     :with-header="false"
     custom-class="drawer-nav"

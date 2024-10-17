@@ -403,3 +403,14 @@ export default {
   margin-right: 12px;
 }
 </style>
+<style lang="scss">
+@media (max-width: 800px) {
+.navbar{
+  height: 90px !important;
+}
+.right-menu{
+  display: flex;
+  align-items: center;
+}
+}
+</style>
