@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div v-if="this.device === 'mobile'" class="right-menu" @click="drawer = true">
+    <div v-if="this.device === 'mobile'" class="right-menu" @click="handleDrawer">
       <i class="el-icon-s-fold icon-menu" />
     </div>
     <div v-else class="right-menu">
@@ -93,7 +93,7 @@
         <el-button type="primary" @click="user_true()">确 认</el-button>
       </div>
     </el-dialog>
-    <DrawerNav :drawer="drawer" :username="username" />
+    <DrawerNav ref="drawerNavRef" :username="username" />
   </div>
 </template>
 
@@ -189,7 +189,9 @@ export default {
     this.username = localStorage.getItem(process.env.VUE_APP_PARAM + '_USERNAME')
   },
   methods: {
-
+    handleDrawer() {
+      this.$refs.drawerNavRef.showDrawer = true
+    },
     handleJump(path) {
       this.$router.push(path)
     },

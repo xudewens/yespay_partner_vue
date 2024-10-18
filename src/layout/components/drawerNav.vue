@@ -1,8 +1,9 @@
 <template>
   <el-drawer
-    :visible.sync="drawer"
+    :visible.sync="showDrawer"
     :show-close:="false"
     :with-header="false"
+    :before-close="handleClose"
     custom-class="drawer-nav"
   >
     <div class="nav-container">
@@ -21,10 +22,10 @@
 <script>
 export default {
   props: {
-    drawer: {
-      type: Boolean,
-      default: false
-    },
+    // drawer: {
+    //   type: Boolean,
+    //   default: false
+    // },
     username: {
       type: String,
       default: ''
@@ -47,11 +48,27 @@ export default {
             path: '/merchantManage/orderSearch'
 
           }
-        ]
+        ],
+      showDrawer: false
     }
+  },
+  computed: {
+    // showDrawer: {
+    //   get() {
+    //     return this.drawer
+    //   },
+    //   set(newValue) {
+    //     this.$emit('update', newValue)
+    //   }
+    // }
   },
   mounted() {
     console.log('%c [  ]-65', 'font-size:13px; background:pink; color:#bf2c9f;', this.username)
+  },
+  methods: {
+    handleClose() {
+      this.showDrawer = false
+    }
   }
 }
 </script>
