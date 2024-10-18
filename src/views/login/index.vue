@@ -22,7 +22,7 @@
         <!-- 登录名 -->
         <el-form-item :label="isMobile?'登录帐号':''" prop="username">
           <span class="svg-container">
-            <svg-icon icon-class="user" v-if="!isMobile"/>
+            <svg-icon v-if="!isMobile" icon-class="user" />
           </span>
           <el-input
             ref="username"
@@ -37,7 +37,7 @@
         <!-- 密码 -->
         <el-form-item :label="isMobile?'登录密码':''" prop="password">
           <span class="svg-container">
-            <svg-icon icon-class="password" v-if="!isMobile"/>
+            <svg-icon v-if="!isMobile" icon-class="password" />
           </span>
           <el-input
             :key="passwordType"

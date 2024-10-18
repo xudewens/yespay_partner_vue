@@ -16,11 +16,11 @@
         <el-card class="box-card">
           <div class="statistics-data ">
             <div class="statistics-left">
-              <div class="statistics-data-num"><span style="font-size: 18px;">Rp</span> {{dayNum | formatNumber }}</div>
+              <div class="statistics-data-num"><span style="font-size: 18px;">Rp</span> {{ dayNum | formatNumber }}</div>
               <div class="statistics-data-desc"><span>代收金额</span></div>
             </div>
             <div class="statistics-right">
-              <div class="statistics-data-num">{{dayOrder | formatNumber }}</div>
+              <div class="statistics-data-num">{{ dayOrder | formatNumber }}</div>
               <div class="statistics-data-desc"><span>代收订单</span></div>
             </div>
           </div>
@@ -41,11 +41,11 @@
         <el-card class="box-card">
           <div class="statistics-data ">
             <div class="statistics-left">
-              <div class="statistics-data-num"><span style="font-size: 18px;">Rp</span> {{monthNum | formatNumber }}</div>
+              <div class="statistics-data-num"><span style="font-size: 18px;">Rp</span> {{ monthNum | formatNumber }}</div>
               <div class="statistics-data-desc"><span>代收金额</span></div>
             </div>
             <div class="statistics-right">
-              <div class="statistics-data-num">{{monthOrder | formatNumber }}</div>
+              <div class="statistics-data-num">{{ monthOrder | formatNumber }}</div>
               <div class="statistics-data-desc"><span>代收订单</span></div>
             </div>
           </div>
@@ -77,7 +77,7 @@
             {{ item.state ? '在用':'未用' }}
           </span>
         </div>
-        <el-empty description="无数据" v-if="!cardList.length"></el-empty>
+        <el-empty v-if="!cardList.length" description="无数据" />
       </el-card>
 
     </div>
@@ -85,17 +85,17 @@
 </template>
 
 <script>
-import { getCardList, dealerSummary} from '@/api/cardMch'
+import { getCardList, dealerSummary } from '@/api/cardMch'
 export default {
   data() {
     return {
       dayTime: new Date().toISOString().split('T')[0],
-      mouthTime:new Date().toISOString().slice(0, 7),
+      mouthTime: new Date().toISOString().slice(0, 7),
       cardList: [],
-      dayNum:0,
-      dayOrder:0,
-      monthNum:0,
-      monthOrder:0,
+      dayNum: 0,
+      dayOrder: 0,
+      monthNum: 0,
+      monthOrder: 0
     }
   },
   mounted() {
@@ -105,43 +105,43 @@ export default {
   },
   methods: {
     getCurrentDate(val) {
-      if(val) {
+      if (val) {
         return new Date().toISOString().split('T')[0]
-      }else {
+      } else {
         return new Date().toISOString().slice(0, 7)
       }
     },
     // 按天查询订单
-  async getSummaryDay() {
+    async getSummaryDay() {
       const res = await dealerSummary({
-        type:'DAY',
-        date:this.dayTime
+        type: 'DAY',
+        date: this.dayTime
       })
       this.dayNum = res.data.orderMoney
       this.dayOrder = res.data.count
     },
     // 按月查询订单
-  async getSummaryMouth() {
+    async getSummaryMouth() {
       const res = await dealerSummary({
-        type:'MONTH',
-        date:this.mouthTime
+        type: 'MONTH',
+        date: this.mouthTime
       })
       this.monthNum = res.data.orderMoney
       this.monthOrder = res.data.count
     },
     // 获取银行卡列表
-   async getCardList() {
+    async getCardList() {
       const res = await getCardList({})
       this.cardList = res.data
     },
     // 银行图片展示
     bankImg(bankName) {
-        try {
-          return require(`@/assets/bankImg/${bankName}.png`)
-        } catch (error) {
-          return require(`@/assets/404_images/404.png`)
-        }
-    },
+      try {
+        return require(`@/assets/bankImg/${bankName}.png`)
+      } catch (error) {
+        return require(`@/assets/404_images/404.png`)
+      }
+    }
   }
 }
 </script>

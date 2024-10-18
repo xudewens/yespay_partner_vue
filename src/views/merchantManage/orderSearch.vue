@@ -103,10 +103,10 @@
           align="right"
           show-overflow-tooltip
         >
-        <template slot-scope="scope">
-            <span >{{ scope.row.orderMoney | formatNumber}}</span>
+          <template slot-scope="scope">
+            <span>{{ scope.row.orderMoney | formatNumber }}</span>
           </template>
-      </el-table-column>
+        </el-table-column>
         <!-- 登录账号数量 -->
         <!-- <el-table-column
           prop="linkedType"
@@ -150,7 +150,7 @@
 </template>
 <script>
 import { search_order } from '@/api/cardMch'
-import moment from 'moment-timezone';
+import moment from 'moment-timezone'
 export default {
   name: 'CardMerchant',
   data() {
@@ -260,7 +260,7 @@ export default {
       this.list.endSuccessTime = ''
       this.createTime = []
       this.getTableData()
-    },
+    }
   }
 }
 </script>

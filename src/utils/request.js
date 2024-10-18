@@ -41,7 +41,7 @@ service.interceptors.response.use(
       Message.error('请重新登录')
       setTimeout(() => {
         router.push({ path: '/login' })
-      },1000)
+      }, 1000)
       return Promise.reject('error')
     }
     // 请求不成功
