@@ -7,6 +7,7 @@
           v-model="list.paystatus"
           :placeholder="'支付状态'"
           clearable
+          disabled
           class="merchant_input"
         >
           <el-option
@@ -19,20 +20,22 @@
       </div>
       <div class="merchant">
         <el-input
-          v-model.trim="list.dealerName"
+          v-model.trim="list.platOrderNum"
           placeholder="平台订单号"
+          clearable
           class="merchant_input"
           onkeyup="this.value=this.value.replace(/(^\s*)|(\s*$)/g, '')"
-          @blur="list.dealerName = $event.target.value"
+          @blur="list.platOrderNum = $event.target.value"
         />
       </div>
       <div class="merchant">
         <el-input
-          v-model.trim="list.dealerNo"
+          v-model.trim="list.bankCard"
           placeholder="收款账号"
+          clearable
           class="merchant_input"
           onkeyup="this.value=this.value.replace(/(^\s*)|(\s*$)/g, '')"
-          @blur="list.dealerNo = $event.target.value"
+          @blur="list.bankCard = $event.target.value"
         />
       </div>
       <div class="merchant">
@@ -71,15 +74,14 @@
       >
         <!--平台订单号 -->
         <el-table-column
-          prop="mchNo"
+          prop="platOrderNum"
           :label="'平台订单号'"
           width="300"
           align="left"
-          type="index"
         />
         <!-- 机构 -->
         <el-table-column
-          prop="dealerNo"
+          prop="bankName"
           :label="'机构'"
           min-width="150"
           align="left"
@@ -87,7 +89,7 @@
         />
         <!-- 账号 -->
         <el-table-column
-          prop="dealerName"
+          prop="bankCard"
           :label="'账号'"
           min-width="150"
           align="left"
@@ -95,12 +97,16 @@
         />
         <!-- 金额（Rp） -->
         <el-table-column
-          prop="linkedName"
+          prop="orderMoney"
           :label="'金额（Rp）'"
           min-width="150"
           align="right"
           show-overflow-tooltip
-        />
+        >
+        <template slot-scope="scope">
+            <span >{{ scope.row.orderMoney | formatNumber}}</span>
+          </template>
+      </el-table-column>
         <!-- 登录账号数量 -->
         <!-- <el-table-column
           prop="linkedType"
@@ -117,13 +123,12 @@
           align="left"
         >
           <template slot-scope="scope">
-            <span v-if="scope.row.status == 1">启用</span>
-            <span v-if="scope.row.status == 0" style="color: red;">禁用</span>
+            <span v-if="scope.row.status == 'SUCCESS'">成功</span>
           </template>
         </el-table-column>
         <!-- 成功时间 -->
         <el-table-column
-          prop="createTime"
+          prop="successTime"
           :label="'成功时间'"
           min-width="160"
           align="left"
@@ -144,7 +149,8 @@
   </div>
 </template>
 <script>
-import { dealerInfo_table, update_dealerInfo } from '@/api/card'
+import { search_order } from '@/api/cardMch'
+import moment from 'moment-timezone';
 export default {
   name: 'CardMerchant',
   data() {
@@ -155,11 +161,11 @@ export default {
       TimeZone: localStorage.getItem('TimeZone'),
       tableData: [],
       list: {
-        dealerName: '', // 平台订单号
-        dealerNo: '', // 收款账号
-        paystatus: '', // 支付状态
-        endCreateTime: '', // 成功结束时间
-        startCreateTime: ''// 成功开始时间
+        platOrderNum: '', // 平台订单号
+        bankCard: '', // 收款账号
+        paystatus: true, // 支付状态
+        endSuccessTime: '', // 成功结束时间
+        startSuccessTime: ''// 成功开始时间
       },
       createTime: [],
       payStateOption: [{
@@ -198,8 +204,8 @@ export default {
     //  日期
     dateChange(val) {
       console.log(this.TimeZone, '====this.TimeZone===')
-      this.list.startCreateTime = val ? moment.tz(val[0], this.TimeZone).valueOf() : ''
-      this.list.endCreateTime = val ? moment.tz(val[1], this.TimeZone).valueOf() : ''
+      this.list.startSuccessTime = val ? moment.tz(val[0], this.TimeZone).valueOf() : ''
+      this.list.endSuccessTime = val ? moment.tz(val[1], this.TimeZone).valueOf() : ''
     },
 
     // 分页
@@ -213,7 +219,7 @@ export default {
     },
     //  读取全部列表
     getTableData() {
-      dealerInfo_table({
+      search_order({
         size: this.size,
         current: 1
       }).then((res) => {
@@ -226,13 +232,13 @@ export default {
       if (y !== false) {
         this.current = 1
       }
-      dealerInfo_table({
+      search_order({
         size: this.size,
         current: this.current,
-        dealerName: this.list.dealerName !== '' ? this.list.dealerName : undefined,
-        dealerNo: this.list.dealerNo !== '' ? this.list.dealerNo : undefined,
-        startCreateTime: this.list.startCreateTime ? this.list.startCreateTime : undefined,
-        endCreateTime: this.list.endCreateTime !== '' ? this.list.endCreateTime : undefined
+        platOrderNum: this.list.platOrderNum !== '' ? this.list.platOrderNum : undefined,
+        bankCard: this.list.bankCard !== '' ? this.list.bankCard : undefined,
+        startSuccessTime: this.list.startSuccessTime ? this.list.startSuccessTime : undefined,
+        endSuccessTime: this.list.endSuccessTime !== '' ? this.list.endSuccessTime : undefined
       }).then((res) => {
         this.tableData = res.data.records
         this.total = +res.data.total
@@ -248,83 +254,13 @@ export default {
     // 重置
     reset() {
       this.current = 1
-      this.list.dealerName = ''
-      this.list.dealerNo = ''
-      this.list.startCreateTime = ''
-      this.list.endCreateTime = ''
+      this.list.platOrderNum = ''
+      this.list.bankCard = ''
+      this.list.startSuccessTime = ''
+      this.list.endSuccessTime = ''
       this.createTime = []
       this.getTableData()
     },
-    // 详情
-    detail(row) {
-      if (row.id) {
-        this.$router.push({
-          path: '/cardMerchant/addcardMerchantEdit',
-          query: {
-            id: row.id,
-            status: row.status,
-            dealerName: row.dealerName,
-            dealerNo: row.dealerNo,
-            tgAlarmId: row.tgAlarmId,
-            tgNotificationId: row.tgNotificationId
-          }
-        })
-      } else {
-        this.$router.push({
-          path: '/cardMerchant/addcardMerchant'
-        })
-      }
-    },
-    // 禁用
-    disabledItem(item) {
-      this.$confirm('是否要禁用卡商，禁用后卡商所有操作账号无法登录卡商端', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async() => {
-        const res = await update_dealerInfo({
-          id: item.id,
-          status: '0'
-        })
-        if (res.code == '021-000-S-999') {
-          this.$message({
-            type: 'success',
-            message: '操作成功!'
-          })
-          this.search(true)
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消操作'
-        })
-      })
-    },
-    // 启用
-    opemItem(item) {
-      this.$confirm('是否要启用卡商?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async() => {
-        const res = await update_dealerInfo({
-          id: item.id,
-          status: '1'
-        })
-        if (res.code == '021-000-S-999') {
-          this.$message({
-            type: 'success',
-            message: '操作成功!'
-          })
-          this.search(true)
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消操作'
-        })
-      })
-    }
   }
 }
 </script>

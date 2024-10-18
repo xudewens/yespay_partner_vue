@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { updateLoginPassword } from '@/api/essential'
+import { updateLoginPassword } from '@/api/cardMch'
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'

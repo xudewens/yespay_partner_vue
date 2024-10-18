@@ -34,12 +34,12 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/v1': {
+      '/dealer': {
         target: process.env.VUE_APP_PROXY_TARGET,
         ws: true,
         changeOrigin: true,
         pathRewrite: {
-          '^/v1': ''
+          '^/dealer': ''
         }
       }
     }

@@ -12,7 +12,7 @@
         auto-complete="off"
         @submit.native.prevent
       >
-        <div style="text-align: center;padding: 10px 0; display: flex;flex-wrap: wrap;">
+        <div style="text-align: center;padding: 10px 0; display: flex;flex-wrap: wrap;" class="logoBox">
           <img src="../../assets/YesPayLogo.png" class="sidebar-logo" height="80px">
           <div class="title_desc">
             Partner
@@ -22,7 +22,7 @@
         <!-- 登录名 -->
         <el-form-item :label="isMobile?'登录帐号':''" prop="username">
           <span class="svg-container">
-            <svg-icon icon-class="user" />
+            <svg-icon icon-class="user" v-if="!isMobile"/>
           </span>
           <el-input
             ref="username"
@@ -35,9 +35,9 @@
           />
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item :label="isMobile?'登录帐号':''" prop="password">
+        <el-form-item :label="isMobile?'登录密码':''" prop="password">
           <span class="svg-container">
-            <svg-icon icon-class="password" />
+            <svg-icon icon-class="password" v-if="!isMobile"/>
           </span>
           <el-input
             :key="passwordType"
@@ -87,7 +87,7 @@
     <el-dialog
       title="请输入谷歌验证码"
       :visible.sync="dialogFormVisible"
-      width="35%"
+      width="60%"
       top="35vh"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -118,8 +118,8 @@
     <el-dialog
       title="绑定谷歌验证器"
       :visible.sync="dialogGoogleAuthenticator"
-      width="850px"
-      top="8vh"
+      width="80%"
+      top="14vh"
       :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { user_googleAuthenticator, googleAuthenticator_bind } from '@/api/essential'
+import { user_googleAuthenticator, googleAuthenticator_bind } from '@/api/cardMch'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Login',
@@ -551,12 +551,18 @@ $light_gray: #eee;
     font-size: 40px;
     line-height: 50px;
 }
-
+.login-form .el-form-item__label{
+  font-size: 22px;
+}
 </style>
 <!-- 移动端样式 -->
 <style  lang="scss" >
 /* 当屏幕宽度小于等于 768px 时应用的样式 */
 @media (max-width: 800px) {
+  .logoBox {
+    width: 100%;
+    margin-bottom: 40px;
+  }
   .login-container {
     .center{
       padding: 0 22px;
@@ -566,15 +572,15 @@ $light_gray: #eee;
       max-width: unset;
     }
     .sidebar-logo{
-      width: 100%;
+      width: 300px;
       height: auto;
     }
     .title_desc{
       text-align: center;
       line-height: 100%;
-      width: 100%;
+      // width: 100%;
       margin-top: 10px;
-      font-size: 78px;
+      font-size: 50px;
     }
   }
   }

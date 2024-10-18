@@ -1,49 +1,54 @@
 <template>
   <section class="home-page-index">
-    <!-- 数据看版 -->
+    <!-- 数据看版-天统计 -->
     <div class="statistics-dashboard">
       <div class="statistics-dashboard-left">
         <el-date-picker
-          v-model="value1"
+          v-model="dayTime"
           type="date"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
           placeholder="选择日期"
-          :default-value="getCurrentDate()"
+          :default-value="getCurrentDate(true)"
           class="date-picker"
+          @change="getSummaryDay"
         />
         <el-card class="box-card">
           <div class="statistics-data ">
             <div class="statistics-left">
-              <div class="statistics-data-num">Rp 120,021,221</div>
+              <div class="statistics-data-num"><span style="font-size: 18px;">Rp</span> {{dayNum | formatNumber }}</div>
               <div class="statistics-data-desc"><span>代收金额</span></div>
             </div>
             <div class="statistics-right">
-              <div class="statistics-data-num">189</div>
+              <div class="statistics-data-num">{{dayOrder | formatNumber }}</div>
               <div class="statistics-data-desc"><span>代收订单</span></div>
             </div>
           </div>
-
         </el-card>
       </div>
+      <!--数据看版-月统计 -->
       <div class="statistics-dashboard-right">
         <el-date-picker
-          v-model="value1"
+          v-model="mouthTime"
           type="month"
           placeholder="选择日期"
-          :default-value="getCurrentDate()"
+          format="yyyy-MM"
+          value-format="yyyy-MM"
+          :default-value="getCurrentDate(false)"
           class="date-picker"
+          @change="getSummaryMouth"
         />
         <el-card class="box-card">
           <div class="statistics-data ">
             <div class="statistics-left">
-              <div class="statistics-data-num">Rp 120,021,221</div>
+              <div class="statistics-data-num"><span style="font-size: 18px;">Rp</span> {{monthNum | formatNumber }}</div>
               <div class="statistics-data-desc"><span>代收金额</span></div>
             </div>
             <div class="statistics-right">
-              <div class="statistics-data-num">189</div>
+              <div class="statistics-data-num">{{monthOrder | formatNumber }}</div>
               <div class="statistics-data-desc"><span>代收订单</span></div>
             </div>
           </div>
-
         </el-card>
       </div>
     </div>
@@ -56,23 +61,23 @@
       <el-card class="box-card card-contsiner">
         <div v-for="(item,index) in cardList" :key="index" class="box-card-item">
           <div class="box-card-item-left">
-            <img class="card-icon" src="@/assets/404_images/404_cloud.png"></img>
+            <img class="card-icon" :src="bankImg(item.bankName.toUpperCase())"></img>
             <div class="card-desc">
 
               <div class="card-code">
-                {{ item.cardCode }}
+                {{ item.bankCard }}
               </div>
-              <div>
-                {{ item.userName }}
+              <div class="card-name">
+                {{ item.cardholderName }}
               </div>
 
             </div>
           </div>
-          <span :class="{ 'status-on':item.status,'status-off':item.status===0}">
-            {{ item.status?'在用':'未用' }}
+          <span :class="{ 'status-on':item.state,'status-off':!item.state}">
+            {{ item.state ? '在用':'未用' }}
           </span>
         </div>
-
+        <el-empty description="无数据" v-if="!cardList.length"></el-empty>
       </el-card>
 
     </div>
@@ -80,36 +85,63 @@
 </template>
 
 <script>
+import { getCardList, dealerSummary} from '@/api/cardMch'
 export default {
   data() {
     return {
-      value1: null,
-      cardList: [
-        {
-          type: '银行类型', // 用于展示icon
-          cardCode: '29319247126',
-          userName: 'asassadndakdsand',
-          status: 1 // 银行卡状态
-        }, {
-          type: '银行类型', // 用于展示icon
-          cardCode: '29319247126',
-          userName: 'asassadndakdsand',
-          status: 1 // 银行卡状态
-        },
-        {
-          type: '银行类型', // 用于展示icon
-          cardCode: '29319247126',
-          userName: 'asassadndakdsand',
-          status: 0 // 银行卡状态
-        }
-      ]
+      dayTime: new Date().toISOString().split('T')[0],
+      mouthTime:new Date().toISOString().slice(0, 7),
+      cardList: [],
+      dayNum:0,
+      dayOrder:0,
+      monthNum:0,
+      monthOrder:0,
     }
   },
+  mounted() {
+    this.getCardList()
+    this.getSummaryDay()
+    this.getSummaryMouth()
+  },
   methods: {
-    getCurrentDate() {
-      const now = new Date()
-      return now.toISOString().substr(0, 10)
-    }
+    getCurrentDate(val) {
+      if(val) {
+        return new Date().toISOString().split('T')[0]
+      }else {
+        return new Date().toISOString().slice(0, 7)
+      }
+    },
+    // 按天查询订单
+  async getSummaryDay() {
+      const res = await dealerSummary({
+        type:'DAY',
+        date:this.dayTime
+      })
+      this.dayNum = res.data.orderMoney
+      this.dayOrder = res.data.count
+    },
+    // 按月查询订单
+  async getSummaryMouth() {
+      const res = await dealerSummary({
+        type:'MONTH',
+        date:this.mouthTime
+      })
+      this.monthNum = res.data.orderMoney
+      this.monthOrder = res.data.count
+    },
+    // 获取银行卡列表
+   async getCardList() {
+      const res = await getCardList({})
+      this.cardList = res.data
+    },
+    // 银行图片展示
+    bankImg(bankName) {
+        try {
+          return require(`@/assets/bankImg/${bankName}.png`)
+        } catch (error) {
+          return require(`@/assets/404_images/404.png`)
+        }
+    },
   }
 }
 </script>
@@ -117,7 +149,7 @@ export default {
 <style lang="scss">
 .home-page-index {
   padding: 50px 40px;
-  height: 100vh;
+  // height: 100vh;
 }
 .statistics-dashboard {
     display: flex;
@@ -171,6 +203,7 @@ export default {
     border-bottom: 1px solid #d7d7d7;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 5px 0px;
 }
 .card-icon{
@@ -181,23 +214,25 @@ export default {
 }
 .box-card-item-left{
     display: flex;
+    align-items: center;
 }
 .card-desc{
   font-size: 18px;
 }
-.card-contsiner{
-    width: 500px;
+.card-name{
+  font-size: 18px;
 }
 .card-code{
     margin-bottom: 3px;
+    font-weight: bold;
 }
 .status-on{
 color: #557822;
 line-height: 40px;
 }
 .status-off{
-color: #c72a29;
-line-height: 40px;
+  color: #c72a29;
+  line-height: 40px;
 
 }
 

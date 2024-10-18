@@ -1,4 +1,4 @@
-import { login, getInfo } from '@/api/user'
+import { login, logout} from '@/api/cardMch'
 // logout
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
@@ -42,16 +42,16 @@ const actions = {
         googleCode: googleCode || undefined
       }).then(response => {
         // 登录成功并且已绑定谷歌验证码
+        console.log(response,'======response====')
         if (response.code === '021-000-S-999' && response.data.bindGoogle) {
-          const menuIds =  flattenTree(response.data.permissionTree)
-          console.log(menuIds,'============menuIds')
+          // const menuIds =  flattenTree(response.data.permissionTree)
           Cookies.set(process.env.VUE_APP_PARAM + '_TOKEN', response.data.token) // token
           localStorage.setItem(process.env.VUE_APP_PARAM + '_USERNAME', username) // 用户名
-          localStorage.setItem(process.env.VUE_APP_PARAM + '_USERTYPE', username === 'admin' ? username : 'user') // 用户身份 response.data.userType
-          localStorage.setItem(process.env.VUE_APP_PARAM + '_MENU', JSON.stringify(response.data.permissionTree)) // 菜单
+          // localStorage.setItem(process.env.VUE_APP_PARAM + '_USERTYPE', username === 'admin' ? username : 'user') // 用户身份 response.data.userType
+          // localStorage.setItem(process.env.VUE_APP_PARAM + '_MENU', JSON.stringify(response.data.permissionTree)) // 菜单
           localStorage.setItem(process.env.VUE_APP_PARAM + '_USERID', response.data.userId) // 用户名
           localStorage.setItem('TimeZone', response.data.timeZone) // 登录时区
-          localStorage.setItem(process.env.VUE_APP_PARAM + '_MENUIDLIST',JSON.stringify(menuIds)) // 用户名
+          // localStorage.setItem(process.env.VUE_APP_PARAM + '_MENUIDLIST',JSON.stringify(menuIds)) // 用户名
           resolve()
         } else {
           resolve(response)
@@ -62,34 +62,11 @@ const actions = {
       })
     })
   },
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-        const { roles, name, avatar, introduction } = data
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
 
   // user logout
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
-      // logout(state.token).then(() => {
+      logout(state.token).then(() => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       removeToken()
@@ -99,14 +76,12 @@ const actions = {
       localStorage.removeItem(process.env.VUE_APP_PARAM + '_MENU')
       localStorage.removeItem(process.env.VUE_APP_PARAM + '_MENUIDLIST')
       localStorage.removeItem('TimeZone') // 登录时区
-      // reset visited views and cached views
-      // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-      dispatch('tagsView/delAllViews', null, { root: true })
+      // dispatch('tagsView/delAllViews', null, { root: true })
 
       resolve()
-      // }).catch(error => {
-      //   reject(error)
-      // })
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 

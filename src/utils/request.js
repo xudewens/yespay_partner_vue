@@ -57,7 +57,7 @@ service.interceptors.response.use(
         return res
       }
       if (res.code !== 'undefined') {
-        if (res.code !== '021-000-S-999' && res.code !== '021-000-P-009' && res.code !== '018-000-S-999' && res.code !== '018-000-P-001') {
+        if (res.code !== '021-000-S-999' && res.code !== '021-000-P-009' && res.code !== '018-000-S-999' && res.code !== '018-000-P-001' && res.code !== '025-000-S-999') {
           Message({
             message: res.msg,
             type: 'error',
