@@ -183,7 +183,7 @@ export default {
     display: flex;
 }
 .card-desc{
-  font-size: 22px;
+  font-size: 18px;
 }
 .card-contsiner{
     width: 500px;

@@ -58,7 +58,7 @@ export default {
 
 <style lang="scss">
 .drawer-nav{
-    top: 60px !important;
+    top: 90px !important;
 
 }
 .user-name{
