@@ -178,11 +178,6 @@ export default {
     }
   },
   computed: {
-    device() {
-      return this.$store.state.app.device
-    }
-  },
-  computed: {
     ...mapGetters(['sidebar', 'avatar', 'device'])
   },
   mounted() {
